@@ -40,6 +40,9 @@ class ThemeService with ChangeNotifier {
           color: theme.color.text,
         ),
       ),
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: Colors.transparent,
+      ),
     );
   }
 }

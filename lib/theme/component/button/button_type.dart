@@ -41,4 +41,24 @@ enum ButtonType {
         return color ?? Colors.transparent;
     }
   }
+
+  /// Border
+  Border? getBorder(
+    BuildContext context,
+    bool isInactive, [
+    Color? color,
+  ]) {
+    switch (this) {
+      case ButtonType.fill:
+      case ButtonType.flat:
+        return null;
+      case ButtonType.outline:
+        return Border.all(
+            color: getColor(
+          context,
+          isInactive,
+          color,
+        ));
+    }
+  }
 }
