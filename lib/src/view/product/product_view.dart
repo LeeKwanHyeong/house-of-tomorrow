@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:house_of_tomorrow/src/model/Product.dart';
+import 'package:house_of_tomorrow/src/model/cart_item.dart';
+import 'package:house_of_tomorrow/src/service/cart_service.dart';
+import 'package:house_of_tomorrow/src/view/product/widget/product_bottom_sheet.dart';
 import 'package:house_of_tomorrow/src/view/product/widget/product_color_preview.dart';
 import 'package:house_of_tomorrow/src/view/product/widget/product_desc.dart';
+import 'package:house_of_tomorrow/theme/component/cart_button.dart';
 import 'package:house_of_tomorrow/theme/component/color_picker.dart';
-import 'package:house_of_tomorrow/theme/component/counter_button.dart';
 import 'package:house_of_tomorrow/theme/component/pop_button.dart';
 
 import '../../../util/lang/generated/l10n.dart';
@@ -40,43 +44,69 @@ class _ProductViewState extends State<ProductView> {
     });
   }
 
+  /// 카트에 상품 추가
+  void onAddToCartPressed() {
+    final CartService cartService = context.read();
+    final CartItem newCartItem = CartItem(
+      product: widget.product,
+      colorIndex: colorIndex,
+      count: count,
+      isSelected: true,
+    );
+    cartService.add(newCartItem);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          S.current.product,
-        ),
-        leading: const PopButton(),
-        titleSpacing: 0,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: 32),
-        child: Wrap(
-          runSpacing: 32,
-          alignment: WrapAlignment.center,
-          children: [
-            /// Product Color Preview
-            ProductColorPreview(
-              colorIndex: colorIndex,
-              product: widget.product,
+          title: Text(
+            S.current.product,
+          ),
+          leading: const PopButton(),
+          titleSpacing: 0,
+          actions: const [
+            CartButton(),
+          ]),
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(vertical: 32),
+              child: Wrap(
+                runSpacing: 32,
+                alignment: WrapAlignment.center,
+                children: [
+                  /// Product Color Preview
+                  ProductColorPreview(
+                    colorIndex: colorIndex,
+                    product: widget.product,
+                  ),
+
+                  /// ColorPicker
+                  ColorPicker(
+                    colorIndex: colorIndex,
+                    colorList: widget.product.productColorList
+                        .map((e) => e.color)
+                        .toList(),
+                    onColorSelected: onColorIndexChanged,
+                  ),
+
+                  /// Product Description
+                  ProductDesc(product: widget.product),
+                ],
+              ),
             ),
+          ),
 
-            /// ColorPicker
-            ColorPicker(
-              colorIndex: colorIndex,
-              colorList:
-                  widget.product.productColorList.map((e) => e.color).toList(),
-              onColorSelected: onColorIndexChanged,
-            ),
-
-            /// Product Description
-            ProductDesc(product: widget.product),
-
-            /// Counter Button
-            CounterButton(count: count, onChanged: onCountChanged)
-          ],
-        ),
+          /// Product Bottom Sheet
+          ProductBottomSheet(
+            count: count,
+            product: widget.product,
+            onCounterChanged: onCountChanged,
+            onAddToCartPressed: onAddToCartPressed,
+          )
+        ],
       ),
     );
   }
