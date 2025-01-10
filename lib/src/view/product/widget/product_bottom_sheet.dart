@@ -4,6 +4,7 @@ import 'package:house_of_tomorrow/src/service/theme_service.dart';
 import 'package:house_of_tomorrow/theme/component/bottom_sheet/base_bottom_sheet.dart';
 import 'package:house_of_tomorrow/theme/component/button/button.dart';
 import 'package:house_of_tomorrow/theme/component/counter_button.dart';
+import 'package:house_of_tomorrow/theme/resource/layout.dart';
 import 'package:house_of_tomorrow/util/helper/intl_helper.dart';
 
 import '../../../../util/lang/generated/l10n.dart';
@@ -25,7 +26,10 @@ class ProductBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseBottomSheet(
       padding: EdgeInsets.only(
-        top: 32,
+        top: context.layout(
+          32,
+          desktop: 16,
+        ),
         bottom: 16,
         left: 16,
         right: 16,

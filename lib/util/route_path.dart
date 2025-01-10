@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:house_of_tomorrow/src/model/Product.dart';
 import 'package:house_of_tomorrow/src/view/cart/cart_view.dart';
 import 'package:house_of_tomorrow/src/view/shopping/shopping_view.dart';
+import 'package:house_of_tomorrow/theme/component/constrained_screen.dart';
 
 import '../src/view/product/product_view.dart';
 
@@ -26,7 +27,9 @@ abstract class RoutePath {
     }
 
     return MaterialPageRoute(
-      builder: (context) => page,
+      builder: (context) => ConstrainedScreen(
+        child: page,
+      ),
     );
   }
 }
